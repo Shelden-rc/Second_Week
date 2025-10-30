@@ -1,6 +1,7 @@
 package by.Shelden.util;
 
-import by.Shelden.entity.User;
+import by.Shelden.entity.UserEntity;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -19,7 +20,7 @@ public class HibernateUtil {
                     .configure("hibernate.cfg.xml")
                     .build();
             return new MetadataSources(registry)
-                    .addAnnotatedClass(User.class)
+                    .addAnnotatedClass(UserEntity.class)
                     .buildMetadata()
                     .buildSessionFactory();
 

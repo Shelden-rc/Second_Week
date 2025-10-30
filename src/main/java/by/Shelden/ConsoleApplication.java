@@ -1,7 +1,9 @@
 package by.Shelden;
 
-import by.Shelden.entity.User;
+import by.Shelden.entity.UserEntity;
 import by.Shelden.service.UserService;
+
+import by.Shelden.util.HibernateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +26,7 @@ public class ConsoleApplication {
                 case 5 -> deleteUser(scanner);
                 case 0 -> {
                     running = false;
-                    userService.shutDown();
+                    HibernateUtil.shutdown();
                     log.info("Закрытие программы");
                     System.out.println("Выход из программы");
                 }
@@ -74,9 +76,9 @@ public class ConsoleApplication {
         System.out.println("Введите ID пользователя:");
         Long id = scanner.nextLong();
         scanner.nextLine();
-        User user = userService.findUser(id);
-        if(user != null){
-            System.out.println(user);
+        UserEntity userEntity = userService.findUser(id);
+        if(userEntity != null){
+            System.out.println(userEntity);
         }else {
             System.out.println("Пользователь не найден");
         }
@@ -90,9 +92,9 @@ public class ConsoleApplication {
         System.out.println("Введите ID пользователя:");
         Long id = scanner.nextLong();
         scanner.nextLine();
-        User user = userService.findUser(id);
-        if(user != null){
-            System.out.println(user);
+        UserEntity userEntity = userService.findUser(id);
+        if(userEntity != null){
+            System.out.println(userEntity);
         }else {
             System.out.println("Пользователь не найден");
             return;
@@ -104,11 +106,11 @@ public class ConsoleApplication {
         System.out.println("Введите новый возраст пользователя");
         int age = scanner.nextInt();
         scanner.nextLine();
-        user.setName(name);
-        user.setEmail(email);
-        user.setAge(age);
+        userEntity.setName(name);
+        userEntity.setEmail(email);
+        userEntity.setAge(age);
         try {
-            userService.updateUser(user);
+            userService.updateUser(userEntity);
         }catch (Exception e){
             System.out.println("Ошибка обновления: " + e.getMessage());
         }
@@ -118,9 +120,9 @@ public class ConsoleApplication {
         System.out.println("Введите ID пользователя:");
         Long id = scanner.nextLong();
         scanner.nextLine();
-        User user = userService.findUser(id);
-        if(user != null){
-            System.out.println(user);
+        UserEntity userEntity = userService.findUser(id);
+        if(userEntity != null){
+            System.out.println(userEntity);
         }else {
             System.out.println("Пользователь не найден");
             return;

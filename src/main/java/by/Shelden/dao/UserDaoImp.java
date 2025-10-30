@@ -1,23 +1,25 @@
 package by.Shelden.dao;
 
-import by.Shelden.entity.User;
+import by.Shelden.entity.UserEntity;
 import by.Shelden.util.HibernateUtil;
+
 import org.hibernate.Transaction;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
-public class UserDao implements Dao{
+public class UserDaoImp implements UserDao{
 
-    private static final Logger log = LoggerFactory.getLogger(UserDao.class);
+    private static final Logger log = LoggerFactory.getLogger(UserDaoImp.class);
 
-    public void save(User user){
+    public void save(UserEntity userEntity){
         Transaction tx = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             log.info("Попытка добавления обьекта");
             tx = session.beginTransaction();
-            session.persist(user);
+            session.persist(userEntity);
             tx.commit();
         }catch (Exception e){
             if(tx != null){
@@ -27,36 +29,34 @@ public class UserDao implements Dao{
         }
     }
 
-    public User getById(Long id){
+    public UserEntity getById(Long id){
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             log.info("Попытка поиска обьекта");
-            User user = session.find(User.class, id);
-            return user;
+            return session.find(UserEntity.class, id);
         } catch (Exception e) {
             log.error("Ошибка поиска обьекта", e);
             return null;
         }
     }
 
-    public List<User> getAll(){
+    public List<UserEntity> getAll(){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
             log.info("Попытка получения списка обьектов");
-            List<User> list = session
-                    .createQuery("FROM User", User.class)
+            return session
+                    .createQuery("FROM User", UserEntity.class)
                     .list();
-            return list;
         } catch (Exception e) {
             log.error("Ошибка получения списка обьектов", e);
             return List.of();
         }
     }
 
-    public void update(User user){
+    public void update(UserEntity userEntity){
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             log.info("Попытка обновления пользователя");
             tx = session.beginTransaction();
-            session.merge(user);
+            session.merge(userEntity);
             tx.commit();
         } catch (Exception e) {
             if (tx != null) {
@@ -71,7 +71,7 @@ public class UserDao implements Dao{
         try(Session session = HibernateUtil.getSessionFactory().openSession()) {
             log.info("Попытка удаления обьекта");
             tx = session.beginTransaction();
-            User user = session.find(User.class, id);
+            UserEntity user = session.find(UserEntity.class, id);
             if(user != null){
                 session.remove(user);
             }

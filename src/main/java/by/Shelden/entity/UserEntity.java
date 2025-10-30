@@ -1,5 +1,6 @@
 package by.Shelden.entity;
 
+
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class UserEntity {
 
     @Id
     @Column(name = "id")
@@ -28,9 +29,9 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDate createdAt;
 
-    public User(){}
+    public UserEntity(){}
 
-    public User(String name, String email, Integer age){
+    public UserEntity(String name, String email, Integer age){
         this.name = name;
         this.email = email;
         this.age = age;
@@ -84,8 +85,8 @@ public class User {
         if (o == null || getClass() != o.getClass()){
             return false;
         }
-        User user = (User) o;
-        return Objects.equals(id, user.id) && Objects.equals(email, user.email);
+        UserEntity userEntity = (UserEntity) o;
+        return Objects.equals(id, userEntity.id) && Objects.equals(email, userEntity.email);
     }
 
     @Override
