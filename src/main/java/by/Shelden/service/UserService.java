@@ -1,13 +1,16 @@
 package by.Shelden.service;
 
 import by.Shelden.dao.UserDao;
-import by.Shelden.dao.UserDaoImp;
 import by.Shelden.entity.UserEntity;
 
 import java.util.List;
 
 public class UserService {
-    private final UserDao dao = new UserDaoImp();
+    private final UserDao dao;
+
+    public UserService(UserDao userDao) {
+        this.dao = userDao;
+    }
 
     public void createUser(String name, String email, int age){
         dao.save(new UserEntity(name, email, age));

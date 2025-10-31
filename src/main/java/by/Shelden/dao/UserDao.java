@@ -10,7 +10,6 @@ public interface UserDao {
     /**
      * Сохраняет нового пользователя в базе данных.
      * @param userEntity сущность пользователя (без id)
-     * @return сохранённая сущность пользователя с сгенерированным id
      */
     void save(UserEntity userEntity);
     /**
@@ -27,13 +26,11 @@ public interface UserDao {
     /**
      * Обновляет данные существующего пользователя.
      * @param userEntity сущность с заполненным id
-     * @return обновлённая сущность
      */
     void update(UserEntity userEntity);
     /**
      * Удаляет пользователя по идентификатору.
      * @param id идентификатор
-     * @return true, если удаление было выполнено; false, если пользователь не найден
      */
     void deleteById(Long id);
 }

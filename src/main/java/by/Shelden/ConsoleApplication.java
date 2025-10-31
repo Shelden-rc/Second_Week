@@ -1,5 +1,6 @@
 package by.Shelden;
 
+import by.Shelden.dao.UserDaoImp;
 import by.Shelden.entity.UserEntity;
 import by.Shelden.service.UserService;
 
@@ -11,7 +12,7 @@ import java.util.Scanner;
 
 public class ConsoleApplication {
     private static final Logger log = LoggerFactory.getLogger(ConsoleApplication.class);
-    private static final UserService userService = new UserService();
+    private static final UserService userService = new UserService(new UserDaoImp());
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -27,6 +28,7 @@ public class ConsoleApplication {
                 case 0 -> {
                     running = false;
                     HibernateUtil.shutdown();
+                    scanner.close();
                     log.info("Закрытие программы");
                     System.out.println("Выход из программы");
                 }
