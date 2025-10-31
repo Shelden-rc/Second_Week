@@ -43,7 +43,7 @@ public class UserDaoImp implements UserDao{
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
             log.info("Попытка получения списка обьектов");
             return session
-                    .createQuery("FROM User", UserEntity.class)
+                    .createQuery("FROM UserEntity", UserEntity.class)
                     .list();
         } catch (Exception e) {
             log.error("Ошибка получения списка обьектов", e);
