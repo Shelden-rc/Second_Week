@@ -1,7 +1,6 @@
 package by.Shelden.util;
 
 import by.Shelden.entity.UserEntity;
-
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -11,28 +10,46 @@ import org.slf4j.LoggerFactory;
 
 public class HibernateUtil {
     private static final Logger log = LoggerFactory.getLogger(HibernateUtil.class);
-    private static final SessionFactory sessionFactory = buildSessionFactory();
 
-    private static SessionFactory buildSessionFactory(){
+    // Убираем final, делаем ленивую инициализацию
+    private static SessionFactory sessionFactory;
+
+    public static SessionFactory getSessionFactory() {
+        if (sessionFactory == null) {
+            sessionFactory = buildSessionFactory();
+        }
+        return sessionFactory;
+    }
+
+    private static SessionFactory buildSessionFactory() {
         try {
             log.info("Запуск Hibernate SessionFactory");
-            StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
-                    .configure("hibernate.cfg.xml")
-                    .build();
+
+            StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder()
+                    .configure("hibernate.cfg.xml");
+
+            // Подставляем значения из System.properties, если они есть
+            String url = System.getProperty("hibernate.connection.url");
+            String user = System.getProperty("hibernate.connection.username");
+            String pass = System.getProperty("hibernate.connection.password");
+            String hbm2ddl = System.getProperty("hibernate.hbm2ddl.auto");
+
+            if (url != null) registryBuilder.applySetting("hibernate.connection.url", url);
+            if (user != null) registryBuilder.applySetting("hibernate.connection.username", user);
+            if (pass != null) registryBuilder.applySetting("hibernate.connection.password", pass);
+            if (hbm2ddl != null) registryBuilder.applySetting("hibernate.hbm2ddl.auto", hbm2ddl);
+
+            StandardServiceRegistry registry = registryBuilder.build();
+
             return new MetadataSources(registry)
                     .addAnnotatedClass(UserEntity.class)
                     .buildMetadata()
                     .buildSessionFactory();
 
-        }catch (Exception ex){
+        } catch (Exception ex) {
             log.error("Ошибка создания сессии", ex);
             throw new ExceptionInInitializerError(ex);
         }
-    }
-
-    public static SessionFactory getSessionFactory() {
-        log.info("Получение сессии");
-        return sessionFactory;
     }
 
     public static void shutdown() {
@@ -41,5 +58,4 @@ public class HibernateUtil {
             sessionFactory.close();
         }
     }
-
 }
