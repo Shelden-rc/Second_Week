@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 public class HibernateUtil {
     private static final Logger log = LoggerFactory.getLogger(HibernateUtil.class);
 
-    // Убираем final, делаем ленивую инициализацию
     private static SessionFactory sessionFactory;
 
     public static SessionFactory getSessionFactory() {
@@ -28,7 +27,6 @@ public class HibernateUtil {
             StandardServiceRegistryBuilder registryBuilder = new StandardServiceRegistryBuilder()
                     .configure("hibernate.cfg.xml");
 
-            // Подставляем значения из System.properties, если они есть
             String url = System.getProperty("hibernate.connection.url");
             String user = System.getProperty("hibernate.connection.username");
             String pass = System.getProperty("hibernate.connection.password");
