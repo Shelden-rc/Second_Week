@@ -1,9 +1,8 @@
 import by.Shelden.dao.UserDao;
 import by.Shelden.entity.UserEntity;
 import by.Shelden.service.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
+import org.mockito.*;
 
 import java.util.List;
 
@@ -12,14 +11,12 @@ import static org.mockito.Mockito.*;
 
 class UserServiceTest {
 
+    @Mock
     private UserDao userDao;
+
+    @InjectMocks
     private UserService userService;
 
-    @BeforeEach
-    void setup() {
-        userDao = mock(UserDao.class);
-        userService = new UserService(userDao);
-    }
 
     @Test
     void testCreateUser_UsesDaoAndPassesCorrectValues() {
@@ -45,7 +42,7 @@ class UserServiceTest {
     @Test
     void testFindUser_ReturnsUser() {
         UserEntity mockUser = new UserEntity("Test","test@mail.com",25);
-        when(userDao.getById(1L)).thenReturn(mockUser);   // ✅ примеры Mockito stubbing
+        when(userDao.getById(1L)).thenReturn(mockUser);
 
         UserEntity user = userService.findUser(1L);
 

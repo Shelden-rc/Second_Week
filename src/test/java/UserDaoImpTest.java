@@ -4,10 +4,11 @@ import by.Shelden.util.HibernateUtil;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.*;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.junit.jupiter.*;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 public class UserDaoImpTest {
@@ -43,8 +44,8 @@ public class UserDaoImpTest {
         userDao.save(user);
 
         UserEntity fetched = userDao.getById(user.getId());
-        Assertions.assertNotNull(fetched);
-        Assertions.assertEquals("Test", fetched.getName());
+        assertNotNull(fetched);
+        assertEquals("Test", fetched.getName());
     }
 
     @Test
@@ -53,7 +54,7 @@ public class UserDaoImpTest {
         userDao.save(new UserEntity("U2", "u2@test.com", 40));
 
         List<UserEntity> list = userDao.getAll();
-        Assertions.assertTrue(list.size() >= 2);
+        assertTrue(list.size() >= 2);
     }
 
     @Test
@@ -65,7 +66,7 @@ public class UserDaoImpTest {
         userDao.update(u);
 
         UserEntity updated = userDao.getById(u.getId());
-        Assertions.assertEquals("Updated", updated.getName());
+        assertEquals("Updated", updated.getName());
     }
 
     @Test
@@ -75,6 +76,6 @@ public class UserDaoImpTest {
 
         userDao.deleteById(u.getId());
 
-        Assertions.assertNull(userDao.getById(u.getId()));
+        assertNull(userDao.getById(u.getId()));
     }
 }
