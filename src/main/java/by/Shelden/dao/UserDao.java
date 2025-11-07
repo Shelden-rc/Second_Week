@@ -10,8 +10,9 @@ public interface UserDao {
     /**
      * Сохраняет нового пользователя в базе данных.
      * @param userEntity сущность пользователя (без id)
+     * @return сохраненного пользователя
      */
-    void save(UserEntity userEntity);
+    UserEntity save(UserEntity userEntity);
     /**
      * Ищет пользователя по идентификатору.
      * @param id идентификатор
@@ -25,9 +26,11 @@ public interface UserDao {
     List<UserEntity> getAll();
     /**
      * Обновляет данные существующего пользователя.
-     * @param userEntity сущность с заполненным id
+     * @param id идентификатор
+     * @param userEntity данные для обновления
+     * @return Обновленного опльзователя
      */
-    void update(UserEntity userEntity);
+     UserEntity update(Long id, UserEntity userEntity);
     /**
      * Удаляет пользователя по идентификатору.
      * @param id идентификатор
