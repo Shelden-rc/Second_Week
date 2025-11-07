@@ -19,8 +19,8 @@ public class UserApi {
 
     private final UserService userService;
 
-    public UserApi(UserService userServicel) {
-        this.userService = userServicel;
+    public UserApi(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/create_user")
@@ -28,6 +28,7 @@ public class UserApi {
             @RequestBody @Valid UserDto userToCreate
     ){
         log.info("Called method createUser");
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.createUser(userToCreate));
     }
@@ -38,6 +39,7 @@ public class UserApi {
             @RequestBody @Valid UserDto userToUpdate
     ){
         log.info("Called method updateUser");
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.updateUser(id, userToUpdate));
     }
@@ -47,6 +49,7 @@ public class UserApi {
             @PathVariable("id") Long id
     ){
         log.info("Called method getUser");
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body(userService.getUser(id));
     }
@@ -54,6 +57,7 @@ public class UserApi {
     @GetMapping("/get_all")
     public ResponseEntity<List<UserDto>> getAllUsers(){
         log.info("Called method getAllUsers");
+
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -62,6 +66,7 @@ public class UserApi {
             @PathVariable("id") Long id
     ){
         log.info("Called method deleteUser");
+
         userService.deleteUser(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

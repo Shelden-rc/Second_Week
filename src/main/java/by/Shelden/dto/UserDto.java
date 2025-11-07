@@ -24,5 +24,4 @@ Integer age,
 
 @Null
 LocalDate createdAt
-) {
-}
+) {}

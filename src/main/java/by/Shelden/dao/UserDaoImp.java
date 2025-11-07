@@ -21,23 +21,30 @@ public class UserDaoImp implements UserDao{
     }
 
     public UserEntity save(UserEntity userEntity){
+        log.info("Try to save Entity");
+
         userRepository.save(userEntity);
         return userEntity;
     }
 
     public UserEntity getById(Long id){
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(
+        log.info("Try to get Entity");
+
+        return userRepository.findById(id).orElseThrow(
                 ()-> new EntityNotFoundException(
                 "Not found reservation by id = " + id
         ));
-        return userEntity;
     }
 
     public List<UserEntity> getAll(){
+        log.info("Try to getAll");
+
         return userRepository.findAll();
     }
 
     public UserEntity update(Long id, UserEntity userEntity){
+        log.info("Try to update");
+
         var entityToUpdate = userRepository.findById(id).orElseThrow(
                 ()-> new EntityNotFoundException(
                         "Not found reservation by id = " + id
@@ -51,10 +58,13 @@ public class UserDaoImp implements UserDao{
     }
 
     public void deleteById(Long id){
+        log.info("Try to delete");
+
         var entityToDelete = userRepository.findById(id).orElseThrow(
                 ()-> new EntityNotFoundException(
                         "Not found reservation by id = " + id
                 ));
+
         userRepository.delete(entityToDelete);
     }
 }
