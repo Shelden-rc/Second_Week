@@ -1,35 +1,43 @@
 package by.Shelden.service;
 
-import by.Shelden.dao.UserDao;
-import by.Shelden.entity.UserEntity;
+import by.Shelden.dao.UserDaoImp;
+import by.Shelden.dto.UserDto;
+import by.Shelden.util.UserMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class UserService {
-    private final UserDao dao;
 
-    public UserService(UserDao userDao) {
-        this.dao = userDao;
+    private final UserDaoImp userDao;
+    private final UserMapper mapper;
+
+    public UserService(UserDaoImp userDao, UserMapper mapper) {
+        this.userDao = userDao;
+        this.mapper = mapper;
     }
 
-    public void createUser(String name, String email, int age){
-        dao.save(new UserEntity(name, email, age));
+    public UserDto createUser(UserDto userToCreate) {
+        return mapper.entityToDto(userDao.save(mapper.dtoToEntity(userToCreate)));
     }
 
-    public UserEntity findUser(Long id){
-        return dao.getById(id);
+    public UserDto getUser(Long id){
+        return mapper.entityToDto(userDao.getById(id));
     }
 
-    public List<UserEntity> getAllUsers(){
-        return dao.getAll();
+    public List<UserDto> getAllUsers(){
+        return userDao.getAll().stream()
+                .map(mapper::entityToDto)
+                .toList();
     }
 
-    public void updateUser(UserEntity userEntity){
-        dao.update(userEntity);
+    public UserDto updateUser(Long id, UserDto userDto){
+        return mapper.entityToDto(userDao.update(id, mapper.dtoToEntity(userDto)));
     }
 
     public void deleteUser(Long id){
-        dao.deleteById(id);
+        userDao.deleteById(id);
     }
 
 }
