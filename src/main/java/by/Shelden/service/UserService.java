@@ -1,25 +1,38 @@
 package by.Shelden.service;
 
 import by.Shelden.dao.UserDaoImp;
+import by.Shelden.dto.OperationType;
 import by.Shelden.dto.UserDto;
+import by.Shelden.dto.UserEvent;
 import by.Shelden.util.UserMapper;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+
 @Service
 public class UserService {
 
+    private static final String TOPIC = "user-events";
+
     private final UserDaoImp userDao;
     private final UserMapper mapper;
+    private final KafkaTemplate<String, UserEvent> kafkaTemplate;
+    private final EmailNotificationService emailService;
 
-    public UserService(UserDaoImp userDao, UserMapper mapper) {
+    public UserService(UserDaoImp userDao, UserMapper mapper,KafkaTemplate<String, UserEvent> kafkaTemplate, EmailNotificationService emailService) {
         this.userDao = userDao;
         this.mapper = mapper;
+        this.kafkaTemplate = kafkaTemplate;
+        this.emailService = emailService;
     }
 
     public UserDto createUser(UserDto userToCreate) {
-        return mapper.entityToDto(userDao.save(mapper.dtoToEntity(userToCreate)));
+        UserDto saved = mapper.entityToDto(userDao.save(mapper.dtoToEntity(userToCreate)));
+        emailService.sendDirect(saved.email(), saved.name(), OperationType.CREATE);
+        kafkaTemplate.send(TOPIC, saved.email(),new UserEvent(OperationType.CREATE, saved.email()));
+        return saved;
     }
 
     public UserDto getUser(Long id){
@@ -37,7 +50,10 @@ public class UserService {
     }
 
     public void deleteUser(Long id){
+        UserDto user = mapper.entityToDto(userDao.getById(id));
         userDao.deleteById(id);
+        emailService.sendDirect(user.email(), user.name(), OperationType.DELETE);
+        kafkaTemplate.send(TOPIC, user.email(), new UserEvent(OperationType.DELETE, user.email()));
     }
 
 }
