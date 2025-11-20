@@ -1,4 +1,4 @@
-package by.Shelden.service;
+package by.Shelden.directMail;
 
 import by.Shelden.dto.OperationType;
 import org.slf4j.Logger;
@@ -9,32 +9,36 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class EmailNotificationService {
+public class EmailNotificationSender {
 
-    private static final Logger log = LoggerFactory.getLogger(EmailNotificationService.class);
+    private static final Logger log = LoggerFactory.getLogger(EmailNotificationSender.class);
     private final JavaMailSender mailSender;
 
-    public EmailNotificationService(JavaMailSender mailSender) {
+    public EmailNotificationSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
     }
 
     public void sendDirect(String email, String name, OperationType operation) {
+        final String SUBJECT_CREATE = "Аккаунт успешно создан!";
+        final String SUBJECT_DELETE = "Ваш аккаунт был удалён";
+        final String BODY_TEMPLATE = """
+            Здравствуйте, %s!
+            
+            %s
+            """.stripTrailing();
+        final String ACTION_TEXT_CREATE = "Ваш аккаунт успешно создан в системе.";
+        final String ACTION_TEXT_DELETE = "Ваш аккаунт был удалён из системы.";
+
         String subject = switch (operation) {
-            case CREATE -> "Аккаунт успешно создан!";
-            case DELETE -> "Ваш аккаунт был удалён";
+            case CREATE -> SUBJECT_CREATE;
+            case DELETE -> SUBJECT_DELETE;
         };
-        String text = switch (operation) {
-            case CREATE -> String.format("""
-                    Здравствуйте, %s!
-                    
-                    Ваш аккаунт успешно создан в системе.
-                    """, name);
-            case DELETE -> String.format("""
-                    Здравствуйте, %s!
-                    
-                    Ваш аккаунт был удалён из системы.
-                    """, name);
+        String actionText = switch (operation) {
+            case CREATE -> ACTION_TEXT_CREATE;
+            case DELETE -> ACTION_TEXT_DELETE;
         };
+
+        String text = String.format(BODY_TEMPLATE, name, actionText);
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);

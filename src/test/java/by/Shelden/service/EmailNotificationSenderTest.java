@@ -1,5 +1,6 @@
 package by.Shelden.service;
 
+import by.Shelden.directMail.EmailNotificationSender;
 import by.Shelden.dto.OperationType;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,10 @@ import static org.mockito.Mockito.verify;
                 "port=9095"
         }
 )
-class EmailNotificationServiceTest {
+class EmailNotificationSenderTest {
 
     @Autowired
-    private EmailNotificationService emailNotificationService;
+    private EmailNotificationSender emailNotificationService;
 
     @MockitoBean
     private JavaMailSender mailSender;

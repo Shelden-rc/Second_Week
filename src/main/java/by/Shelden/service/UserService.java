@@ -1,6 +1,7 @@
 package by.Shelden.service;
 
 import by.Shelden.dao.UserDaoImp;
+import by.Shelden.directMail.EmailNotificationSender;
 import by.Shelden.dto.OperationType;
 import by.Shelden.dto.UserDto;
 import by.Shelden.dto.UserEvent;
@@ -19,9 +20,9 @@ public class UserService {
     private final UserDaoImp userDao;
     private final UserMapper mapper;
     private final KafkaTemplate<String, UserEvent> kafkaTemplate;
-    private final EmailNotificationService emailService;
+    private final EmailNotificationSender emailService;
 
-    public UserService(UserDaoImp userDao, UserMapper mapper,KafkaTemplate<String, UserEvent> kafkaTemplate, EmailNotificationService emailService) {
+    public UserService(UserDaoImp userDao, UserMapper mapper,KafkaTemplate<String, UserEvent> kafkaTemplate, EmailNotificationSender emailService) {
         this.userDao = userDao;
         this.mapper = mapper;
         this.kafkaTemplate = kafkaTemplate;
